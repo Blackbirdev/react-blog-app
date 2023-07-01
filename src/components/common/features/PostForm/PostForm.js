@@ -1,5 +1,9 @@
 import { Form, Button } from "react-bootstrap";
 import { useState } from "react";
+import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.snow.css';
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const PostForm = ({ action, actionText, ...props }) => {
 
@@ -28,8 +32,8 @@ const PostForm = ({ action, actionText, ...props }) => {
                         <Form.Control style={{ width: '50%' }} placeholder="Enter author" value={author} onChange={e => setAuthor(e.target.value)} />
                     </Form.Group>
                     <Form.Group className="mb-4">
-                        <Form.Label>Published date</Form.Label>
-                        <Form.Control style={{ width: '50%' }} placeholder="Enter date DD-MM-YYYY" value={publishedDate} onChange={e => setPublishedDate(e.target.value)} />
+                        <Form.Label style={{ width: '80%', border: '' }}>Published date</Form.Label>
+                        <ReactDatePicker dateFormat="dd-MM-yyy" selected={publishedDate} onChange={(date) => setPublishedDate(date)} />
                     </Form.Group>
                     <Form.Group className="mb-4">
                         <Form.Label>Short description</Form.Label>
@@ -37,7 +41,7 @@ const PostForm = ({ action, actionText, ...props }) => {
                     </Form.Group>
                     <Form.Group className="mb-4">
                         <Form.Label>Content of the post</Form.Label>
-                        <Form.Control placeholder="Leave a comment here" as="textarea" rows={10} value={content} onChange={e => setContent(e.target.value)} />
+                        <ReactQuill placeholder="Leave a comment here" value={content} onChange={setContent} />
                     </Form.Group>
                     <Button style={{ width: '20%' }} variant='primary' type='submit'>{actionText}</Button>
                 </Form>

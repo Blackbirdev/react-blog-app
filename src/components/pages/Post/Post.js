@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { Button, Card, Modal } from "react-bootstrap";
 import { getPostById, removePost } from "../../../redux/postsRedux";
+import { DateToStr } from "../../../utils/dateToStr";
 
 const Post = props => {
 
@@ -35,8 +36,10 @@ const Post = props => {
                             <Button onClick={handleShow} variant='outline-danger m-1'>Delete</Button>
                         </div>
                     </div>
-                    <p><b>Author: </b>{postData.author}<br /><b>Published: </b>{postData.publishedDate}</p>
-                    <p>{postData.shortDescription}</p>
+                    <p><b>Author: </b>{postData.author}
+                        <br /><b>Published: </b>
+                        {DateToStr(postData.publishedDate)}</p>
+                    <p><p dangerouslySetInnerHTML={{ __html: postData.content }} /></p>
                 </Card>
             </div>
 
