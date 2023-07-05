@@ -1,25 +1,27 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
-import { Button, Card, Modal } from "react-bootstrap";
 import { getPostById, removePost } from "../../../redux/postsRedux";
+import { useState } from "react";
+import { Button, Modal, Card } from "react-bootstrap";
 import { DateToStr } from "../../../utils/dateToStr";
+import { getCategoryById } from "../../../redux/categoriesRedux";
 
 const Post = props => {
 
     const { id } = useParams();
-    const postData = useSelector(state => getPostById(state, id))
-
+    const postData = useSelector(state => getPostById(state, id));
     const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const category = useSelector(categories => getCategoryById(categories, postData.categoryId)).name;
 
     const dispatch = useDispatch();
 
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true)
+
     const handleRemove = () => {
         dispatch(removePost(id));
-        handleClose()
+        handleClose();
     }
 
     if (!postData) return <Navigate to="/" />
@@ -36,10 +38,11 @@ const Post = props => {
                             <Button onClick={handleShow} variant='outline-danger m-1'>Delete</Button>
                         </div>
                     </div>
-                    <p><b>Author: </b>{postData.author}
-                        <br /><b>Published: </b>
-                        {DateToStr(postData.publishedDate)}</p>
-                    <p><p dangerouslySetInnerHTML={{ __html: postData.content }} /></p>
+                    <p>
+                        <b>Author: </b>{postData.author}<br />
+                        <b>Published: </b>{DateToStr(postData.publishedDate)}<br />
+                        <b>Category:  </b>{category}</p>
+                    <p dangerouslySetInnerHTML={{ __html: postData.content }} />
                 </Card>
             </div>
 

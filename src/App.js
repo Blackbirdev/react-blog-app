@@ -8,6 +8,8 @@ import AddPost from './components/pages/AddPost/AddPost';
 import EditPost from './components/pages/EditPost/EditPost';
 import About from './components/pages/About/About';
 import NotFound from './components/pages/NotFound/NotFound';
+import AllCategories from './components/pages/AllCategories/AllCategories';
+import Category from './components/common/features/Category/Category';
 
 const App = () => {
   return (
@@ -16,6 +18,8 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/categories" element={<AllCategories />} />
+          <Route path="/categories/:name" element={<Category />} />
           <Route path="/post/:id" element={<Post />} />
           <Route path="/post/add" element={<AddPost />} />
           <Route path="/post/edit/:id" element={<EditPost />} />

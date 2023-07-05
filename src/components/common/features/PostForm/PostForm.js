@@ -1,10 +1,12 @@
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, DropdownButton, Dropdown } from "react-bootstrap";
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { getAllCategories } from "../../../../redux/categoriesRedux";
 
 const PostForm = ({ action, actionText, ...props }) => {
 
@@ -16,13 +18,24 @@ const PostForm = ({ action, actionText, ...props }) => {
     const [content, setContent] = useState(props.content || '');
     const [contentError, setContentError] = useState(false);
     const { register, handleSubmit: validate, formState: { errors } } = useForm();
+    const [categoryId, setCategoryId] = useState(props.post ? props.post.categoryId : '');
+    const [categoryError, setCategoryError] = useState(false);
+
+    const categories = useSelector(getAllCategories);
+
+    const getCategoryNameById = id => categories.find(cat => cat.id === id).name;
 
     const handleSubmit = () => {
         setContentError(!content)
         setDateError(!publishedDate)
-        if (content && publishedDate) {
-            action({ title, author, publishedDate, shortDescription, content });
+        setCategoryError(!categoryId)
+        if (content && publishedDate && categoryId) {
+            action({ title, author, publishedDate, shortDescription, content, categoryId });
         }
+    };
+
+    const handleCategorySelect = e => {
+        setCategoryId(e);
     };
 
     return (
@@ -55,6 +68,17 @@ const PostForm = ({ action, actionText, ...props }) => {
                             selected={publishedDate}
                             onChange={(date) => setPublishedDate(date)} />
                         {dateError && <small className="d-block form-text text-danger mt-2">Published date is required</small>}
+                    </Form.Group>
+                    <Form.Group className="mb-4">
+                        <Form.Label>Category</Form.Label>
+                        <DropdownButton
+                            variant="outline border-secondary"
+                            title={categoryId ? getCategoryNameById(categoryId) : "Select a category..."}
+                            onSelect={handleCategorySelect}>
+                            {categories.map(cat => (
+                                <Dropdown.Item key={cat.id} eventKey={cat.id}>{cat.name}</Dropdown.Item>))}
+                        </DropdownButton>
+                        {categoryError && <small className="d-block form-text text-danger mt-2">Please select a category</small>}
                     </Form.Group>
                     <Form.Group className="mb-4">
                         <Form.Label>Short description</Form.Label>
