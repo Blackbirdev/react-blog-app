@@ -1,4 +1,4 @@
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostById, removePost } from "../../../redux/postsRedux";
 import { useState } from "react";
@@ -15,11 +15,13 @@ const Post = props => {
     const category = useSelector(categories => getCategoryById(categories, postData.categoryId)).name;
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true)
 
     const handleRemove = () => {
+        navigate('/')
         dispatch(removePost(id));
         handleClose();
     }
